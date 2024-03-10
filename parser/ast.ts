@@ -36,9 +36,9 @@ export class Program implements ASTNode {
 export class LetStatement implements Statement {
   Token: Token;
   Name: Identifier;
-  Value: Expression;
+  Value: Expression | null;
 
-  constructor(token: Token, name: Identifier, value: Expression) {
+  constructor(token: Token, name: Identifier, value: Expression | null) {
     this.Token = token;
     this.Name = name;
     this.Value = value;
@@ -67,9 +67,9 @@ export class LetStatement implements Statement {
 
 export class ReturnStatement implements Statement {
   Token: Token;
-  ReturnValue: Expression;
+  ReturnValue: Expression | null;
 
-  constructor(token: Token, returnValue: Expression) {
+  constructor(token: Token, returnValue: Expression | null) {
     this.Token = token;
     this.ReturnValue = returnValue;
   }
@@ -282,10 +282,14 @@ export class IfExpression implements Expression {
 
 export class FunctionLiteral implements Expression {
   Token: Token;
-  Parameters: Identifier[];
+  Parameters: Identifier[] | null;
   Body: BlockStatement;
 
-  constructor(token: Token, parameters: Identifier[], body: BlockStatement) {
+  constructor(
+    token: Token,
+    parameters: Identifier[] | null,
+    body: BlockStatement
+  ) {
     this.Token = token;
     this.Parameters = parameters;
     this.Body = body;
@@ -296,14 +300,11 @@ export class FunctionLiteral implements Expression {
     return this.Token.literal;
   }
   toString(): string {
-    let params: string[] = this.Parameters.map(p => p.toString());
+    let params: string[] | undefined = this.Parameters?.map(p => p.toString());
 
     return (
-      this.tokenLiteral() +
-      "(" +
-      params.join(", ") +
-      ") " +
-      this.Body.toString()
+      this.tokenLiteral() + "(" + params?.join(", ") ||
+      "" + ") " + this.Body.toString()
     );
   }
 }
@@ -311,9 +312,9 @@ export class FunctionLiteral implements Expression {
 export class CallExpression implements Expression {
   Token: Token;
   Function: Expression;
-  Arguments: Expression[];
+  Arguments: Expression[] | null;
 
-  constructor(token: Token, func: Expression, args: Expression[]) {
+  constructor(token: Token, func: Expression, args: Expression[] | null) {
     this.Token = token;
     this.Function = func;
     this.Arguments = args;
@@ -324,9 +325,9 @@ export class CallExpression implements Expression {
     return this.Token.literal;
   }
   toString(): string {
-    let args: string[] = this.Arguments.map(a => a.toString());
+    let args: string[] | undefined = this.Arguments?.map(a => a.toString());
 
-    return this.Function.toString() + "(" + args.join(", ") + ")";
+    return this.Function.toString() + "(" + args?.join(", ") || "" + ")";
   }
 }
 
