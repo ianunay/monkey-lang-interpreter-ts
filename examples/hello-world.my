@@ -1,4 +1,4 @@
 let speak = fn() {
-  "Hello, World!"
+  "Hello World!"
 };
 speak();

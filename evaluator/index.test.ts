@@ -80,6 +80,17 @@ describe("evaluator", () => {
       expect((testEval(input) as IntegerObject).value).toBe(expected);
     });
   });
+
+  describe("Let statement", () => {
+    test.each([
+      { input: "let a = 5; a;", expected: 5 },
+      { input: "let a = 5 * 5; a;", expected: 25 },
+      { input: "let a = 5; let b = a; b;", expected: 5 },
+      { input: "let a = 5; let b = a; let c = a + b + 5; c;", expected: 15 },
+    ])("should evaluate %s", ({ input, expected }) => {
+      expect((testEval(input) as IntegerObject).value).toBe(expected);
+    });
+  });
 });
 
 function testEval(input: string) {
@@ -88,5 +99,6 @@ function testEval(input: string) {
   const program = parser.parseProgram();
   const env = new Environment();
 
-  return Eval(program, env);
+  const val = Eval(program, env);
+  return val;
 }

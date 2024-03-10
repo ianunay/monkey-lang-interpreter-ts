@@ -14,5 +14,5 @@ const parser = new Parser(lexer);
 const program = parser.parseProgram();
 const env = new Environment();
 
-console.log(JSON.stringify(program, null, 2));
+// console.log(JSON.stringify(program, null, 2));
 console.log(Eval(program, env).inspect());

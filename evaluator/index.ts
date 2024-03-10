@@ -57,6 +57,7 @@ export function Eval(node: ASTNode, env: Environment): ObjectStore {
       return value;
     }
     env.set(node.Name.Value, value);
+    return value;
   }
   // Expressions
   else if (node instanceof IntegerLiteral) {
@@ -84,7 +85,6 @@ export function Eval(node: ASTNode, env: Environment): ObjectStore {
 
     return evalInfixExpression(node.Operator, left, right);
   } else if (node instanceof IfExpression) {
-    console.log("IfExpression");
     return evalIfExpression(node, env);
   } else if (node instanceof Identifier) {
     return evalIdentifier(node, env);
@@ -127,9 +127,9 @@ export function Eval(node: ASTNode, env: Environment): ObjectStore {
     return evalIndexExpression(left, index);
   } else if (node instanceof HashLiteral) {
     return evalHashLiteral(node, env);
+  } else {
+    return new ErrorObject("unknown node type");
   }
-
-  return new ErrorObject("unknown node type");
 }
 
 function evalProgram(program: Program, env: Environment): ObjectStore {
