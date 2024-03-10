@@ -3,13 +3,13 @@
   It takes a string of characters as input and produces a sequence of tokens as output.
 */
 
-import { Token, lookupIdent, tokens } from "../token";
+import { Token, lookupIdent, tokens } from "./token";
 
 export default class Lexer {
   input: string;
   position: number;
   readPosition: number;
-  ch: string | 0;
+  ch: string | null;
 
   constructor(input: string) {
     this.input = input;
@@ -22,7 +22,7 @@ export default class Lexer {
 
   readChar() {
     if (this.readPosition >= this.input.length) {
-      this.ch = 0;
+      this.ch = null;
     } else {
       this.ch = this.input[this.readPosition];
     }
@@ -102,7 +102,7 @@ export default class Lexer {
       case "]":
         tok = { type: tokens.RBRACKET, literal: this.ch };
         break;
-      case 0:
+      case null:
         tok = { type: tokens.EOF, literal: "" };
         break;
       default:
@@ -136,7 +136,7 @@ export default class Lexer {
 
   readIdentifier(): string {
     const position = this.position;
-    while (this.ch !== 0 && this.isLetter(this.ch)) {
+    while (this.isLetter(this.ch)) {
       this.readChar();
     }
     return this.input.slice(position, this.position);
@@ -144,7 +144,7 @@ export default class Lexer {
 
   readNumber(): string {
     const position = this.position;
-    while (this.ch !== 0 && this.isDigit(this.ch)) {
+    while (this.isDigit(this.ch)) {
       this.readChar();
     }
     return this.input.slice(position, this.position);
@@ -153,15 +153,15 @@ export default class Lexer {
   readString(): string {
     const position = this.position + 1;
     this.readChar();
-    while (this.ch !== 0 && this.ch !== '"') {
+    while (this.ch !== null && this.ch !== '"') {
       this.readChar();
     }
     return this.input.slice(position, this.position);
   }
 
-  peakChar(): string | 0 {
+  peakChar(): string | null {
     if (this.readPosition >= this.input.length) {
-      return 0;
+      return null;
     } else {
       return this.input[this.readPosition];
     }

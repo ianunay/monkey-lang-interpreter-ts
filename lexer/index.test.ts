@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import Lexer from "./";
-import { tokens } from "../token";
+import { tokens } from "./token";
 
 describe("lexer", () => {
   test("should tokenize the input string", () => {
