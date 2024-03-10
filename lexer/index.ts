@@ -136,7 +136,7 @@ export default class Lexer {
 
   readIdentifier(): string {
     const position = this.position;
-    while (this.isLetter(this.ch)) {
+    while (this.ch && this.isLetter(this.ch)) {
       this.readChar();
     }
     return this.input.slice(position, this.position);
@@ -144,7 +144,7 @@ export default class Lexer {
 
   readNumber(): string {
     const position = this.position;
-    while (this.isDigit(this.ch)) {
+    while (this.ch && this.isDigit(this.ch)) {
       this.readChar();
     }
     return this.input.slice(position, this.position);

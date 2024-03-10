@@ -49,16 +49,16 @@ export const tokens = {
   RETURN: "RETURN",
 };
 
-const keywords = {
-  fn: tokens.FUNCTION,
-  let: tokens.LET,
-  true: tokens.TRUE,
-  false: tokens.FALSE,
-  if: tokens.IF,
-  else: tokens.ELSE,
-  return: tokens.RETURN,
-};
+const keywords = new Map<string, TokenType>([
+  ["fn", tokens.FUNCTION],
+  ["let", tokens.LET],
+  ["true", tokens.TRUE],
+  ["false", tokens.FALSE],
+  ["if", tokens.IF],
+  ["else", tokens.ELSE],
+  ["return", tokens.RETURN],
+]);
 
 export function lookupIdent(ident: string): TokenType {
-  return keywords[ident] || tokens.IDENT;
+  return keywords.get(ident) || tokens.IDENT;
 }
