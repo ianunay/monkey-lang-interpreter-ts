@@ -18,6 +18,7 @@ import {
   ArrayLiteral,
   HashLiteral,
   Program,
+  StringLiteral,
 } from "./ast";
 
 enum Precedence {
@@ -169,7 +170,7 @@ export default class Parser {
       return null;
     }
 
-    const name = new Identifier(tok, tok?.literal);
+    const name = new Identifier(this.curToken, this.curToken?.literal);
 
     if (!this.expectPeek(tokens.ASSIGN)) {
       return null;
@@ -230,10 +231,10 @@ export default class Parser {
         return leftExp;
       }
       this.nextToken();
-      if (leftExp === null) {
-        return null;
+
+      if (leftExp !== null) {
+        leftExp = infix(leftExp);
       }
-      leftExp = infix(leftExp);
     }
 
     return leftExp;
@@ -264,7 +265,7 @@ export default class Parser {
   }
 
   parseStringLiteral() {
-    return new Identifier(this.curToken, this.curToken?.literal);
+    return new StringLiteral(this.curToken, this.curToken?.literal);
   }
 
   parsePrefixExpression() {
@@ -280,11 +281,12 @@ export default class Parser {
   parseInfixExpression(left: Expression) {
     const tok = this.curToken;
     const precedence = this.curPrecedence();
+    this.nextToken();
     const right = this.parseExpression(precedence);
     if (right === null) {
       return null;
     }
-    this.nextToken();
+
     return new InfixExpression(tok, left, tok?.literal, right);
   }
 

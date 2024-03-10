@@ -1,6 +1,6 @@
 import { Token } from "../lexer/token";
 
-interface ASTNode {
+export interface ASTNode {
   tokenLiteral(): string;
   toString(): string;
 }
